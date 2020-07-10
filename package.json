@@ -1,0 +1,19 @@
+{
+  "name": "NYC146",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Ryan Qin, Disha",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "blake2": "^4.0.1",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.9",
+    "nodemon": "^2.0.4"
+  }
+}
