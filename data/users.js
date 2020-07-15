@@ -58,7 +58,7 @@ module.exports = {
         if (!password) throw 'You must provide a password.';
 
         if (typeof userId == 'string') {
-            bandId = ObjectId.createFromHexString(bandId);
+            userId = ObjectId.createFromHexString(userId);
         }
         const userCollection = await users();
         const user = await this.getUser(userId);
