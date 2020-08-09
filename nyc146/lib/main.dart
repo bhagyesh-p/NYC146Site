@@ -88,9 +88,27 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
+  final _formKey = GlobalKey<FormState>();
+
+  bool _isPasswordCompliant(String password, [int minLength = 8]) {
+    bool hasUppercase = password.contains(new RegExp(r'[A-Z]'));
+    bool hasDigits = password.contains(new RegExp(r'[0-9]'));
+    bool hasLowercase = password.contains(new RegExp(r'[a-z]'));
+    bool hasSpecialCharacters =
+        password.contains(new RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+    bool hasMinLength = password.length >= minLength;
+
+    return hasDigits &
+        hasUppercase &
+        hasLowercase &
+        hasSpecialCharacters &
+        hasMinLength;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       onChanged: _updateFormProgress,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -103,6 +121,12 @@ class _SignUpFormState extends State<SignUpForm> {
             child: TextFormField(
               controller: _firstNameTextController,
               decoration: InputDecoration(hintText: 'First name'),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter your first name.';
+                }
+                return null;
+              },
             ),
           ),
           Padding(
@@ -110,6 +134,12 @@ class _SignUpFormState extends State<SignUpForm> {
             child: TextFormField(
               controller: _lastNameTextController,
               decoration: InputDecoration(hintText: 'Last name'),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter your last name.';
+                }
+                return null;
+              },
             ),
           ),
           Padding(
@@ -118,13 +148,35 @@ class _SignUpFormState extends State<SignUpForm> {
               obscureText: true,
               controller: _passwordTextController,
               decoration: InputDecoration(hintText: 'Password'),
+              validator: (value) {
+                if (value.isEmpty || value == null) {
+                  return 'Please enter a password.';
+                }
+                if (!_isPasswordCompliant(value)) {
+                  return '''The password must be at least 8 characters long, contain
+at least one uppercase character, at least one lowercase
+character, at least one number, and at least one
+special character''';
+                }
+                return null;
+              },
             ),
           ),
-          FlatButton(
+          RaisedButton(
             color: Colors.blue,
             textColor: Colors.white,
             // onPressed: _formProgress == 1 ? _showWelcomeScreen : null,
-            onPressed: _formProgress == 1 ? _hashPassword : null,
+            // onPressed: _formProgress == 1 ? _hashPassword : null,
+            onPressed: () {
+              // Validate returns true if the form is valid, otherwise false.
+              if (_formKey.currentState.validate()) {
+                // If the form is valid, display a snackbar. In the real world,
+                // you'd often call a server or save the information in a database.
+                _hashPassword();
+                Scaffold.of(context)
+                    .showSnackBar(SnackBar(content: Text('Processing Data')));
+              }
+            },
             child: Text('Sign up'),
           ),
         ],
