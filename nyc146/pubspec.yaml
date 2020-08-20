@@ -24,6 +24,7 @@ dependencies:
   dbcrypt: ^1.0.0
   flutter:
     sdk: flutter
+  adobe_xd: ^1.0.0+1
 
 
   # The following adds the Cupertino Icons font to your application.
