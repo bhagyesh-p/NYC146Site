@@ -1,5 +1,6 @@
 import 'package:dbcrypt/dbcrypt.dart';
 import 'package:flutter/material.dart';
+import 'package:password/password.dart';
 
 void main() => runApp(SignUpApp());
 
@@ -57,12 +58,16 @@ class _SignUpFormState extends State<SignUpForm> {
 
   void _hashPassword() {
     print(_passwordTextController.text);
-    var salt = DBCrypt().gensaltWithRounds(10);
-    var hashedPassword = DBCrypt().hashpw(_passwordTextController.text, salt);
-    print(hashedPassword);
-    var matches =
-        DBCrypt().checkpw(_passwordTextController.text, hashedPassword);
-    print(matches);
+    // var salt = DBCrypt().gensaltWithRounds(4);
+    // var hashedPassword = DBCrypt().hashpw(_passwordTextController.text, salt);
+    // print(hashedPassword);
+    // var matches =
+    //     DBCrypt().checkpw(_passwordTextController.text, hashedPassword);
+    // print(matches);
+    final algorithm = PBKDF2();
+    final hash = Password.hash(_passwordTextController.text, algorithm);
+    print(hash);
+    print(Password.verify(_passwordTextController.text, hash));
   }
 
   void _showWelcomeScreen() {
